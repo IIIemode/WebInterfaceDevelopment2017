@@ -8,6 +8,12 @@ $(document).ready(function() {
     const content = $('.main_content');
     const image = $('.main_image');
 
+    menu.children().children().click(function() {
+        const activeList = $('.main nav .active');
+        activeList.removeClass('active');
+        $(this).addClass('active');
+    });
+
     if (menu.css('display') == 'block') {
         arrow.css({
             'left': menu.width(),

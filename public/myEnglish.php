@@ -13,9 +13,8 @@ require "header.html";
 <h1>ВЫ:  "Как у вас с английским?"</h1>   
 <p>Я:
     "I think my English is not very bad. Since the beginning of 2017 
-    I try to repeat it every day. I watch TV shows and movies, 
-    I read technical documentation of something in English. 
-    I understand that without it in the world of IT anywhere."
+    I try to repeat it every day on <a href="https://www.duolingo.com/show_store">www.duolingo.com</a>. I watch TV shows and movies, 
+    I read technical documentation of something in English. I understand that without it in the world of IT anywhere."
 </p>
 
 <?php
