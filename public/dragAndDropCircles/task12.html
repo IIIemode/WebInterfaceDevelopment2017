@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Circles</title>
+	<style>
+		canvas{
+			border: 1px solid;
+		}
+	</style>
+</head>
+<body>
+	
+	<script type="text/javascript">
+		var canvas, context, x, y, radius, isDragging = false, circles = [], previousSelectedCircle, distanceFromCenter;
+
+		window.onload = function() {
+			canvas = document.getElementById("drawingCanvas");
+			context = canvas.getContext("2d");
+      canvas.onmousedown = canvasClick;
+      canvas.onmouseup = stopDragging;
+      canvas.onmousemove = dragCircle;
+      canvas.onmouseout = stopDragging;
+
+    }
+
+    function canvasClick(e){
+    /*Получаем координаты точки холста, в которой щелкнули
+      Проверяем, щелкнули ли no кругу
+      С помощью теоремы Пифагора вычисляем расстояние от точки, в которой щелкнули, до центра текущего круга
+      Определяем, находится ли точка, в которой щелкнули, в данном круге
+      Сбрасываем предыдущий выбранный круг 
+      Устанавливаем новый выбранный круг и обновляем холст
+      Прекращаем проверку*/
+      var clickX = e.pageX - canvas.offsetLeft;
+      var clickY = e.pageY - canvas.offsetTop;
+      for (var i = circles.length - 1; i >= 0; i--) {
+        circle = circles[i];
+        distanceFromCenter = Math.sqrt(Math.pow(clickX - circle.x, 2) + Math.pow(clickY - circle.y, 2))
+        if (distanceFromCenter <= circle.radius) {
+          if (previousSelectedCircle != null) previousSelectedCircle.isSelected = false; 
+          previousSelectedCircle = circle;
+          circle.isSelected = true;
+          circles.push(circle);
+          drawCircles();
+          isDragging = true;
+          return;
+        }
+      }
+    }
+
+    function stopDragging(){
+      isDragging = false;
+    }
+    
+    function dragCircle(e){
+    /*Проверка возможности перетаскивания
+      Проверка попадания
+      Сохраняем позицию мыши
+      Перемещаем круг в новую позицию
+      Обновляем холст*/
+      if (isDragging == true) {
+        if (previousSelectedCircle != null) {
+          x = e.pageX - canvas.offsetLeft;
+          y = e.pageY - canvas.offsetTop;
+          previousSelectedCircle.x = x;
+          previousSelectedCircle.y = y;
+          drawCircles();
+        }
+      }
+    }
+
+    function addRandomCircle(){
+    /*Устанавливаем произвольный размер и позицию круга
+    Окрашиваем круг произвольным цветом*/
+    x = randomFromTo(0, canvas.width);
+    y = randomFromTo(0, canvas.height);
+    radius = randomFromTo(10, 60);      
+    var colors = ["green", "blue", "red", "yellow", "magenta", "orange", "brown", "purple", "pink"];
+    color = colors[randomFromTo(0, 8)];
+    /*Создаем новый круг
+      Сохраняем его в массиве
+      Обновляем отображение круга*/
+      var circle = new Circle(x, y, radius, color);
+      circles.push(circle);
+      drawCircles();
+    }
+
+    function clearCanvas(){
+    /*Очистить массив
+    Очистить холст*/
+    circles = [];
+    drawCircles();
+  }
+
+  function randomFromTo(from, to) {
+    return Math.floor(Math.random() * (to - from + 1) + from);
+  } 
+
+  function Circle(x, y, radius, color) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.isSelected = false;
+  }
+
+  function drawCircles() {
+    /*Очистить холст
+      Перебираем все круги
+      Рисуем текущий круг
+      Выделяем выбранный круг рамкой*/
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      for (var i = 0; i < circles.length; i++) {
+        circle = circles[i];
+        context.globalAlpha = 1;
+        context.beginPath(); 
+        context.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI);
+        context.fillStyle = circle.color;
+        context.strokeStyle = circle.color;
+        if (circle.isSelected) {
+          context.strokeStyle = "black";
+          context.lineWidth = 2;
+        } else {
+          context.lineWidth = 1;
+        }
+        context.fill();
+        context.stroke();
+      }
+    }
+
+  </script>
+  <div class="CanvasContainer">
+  <canvas id="drawingCanvas" width="1000" height="500"></canvas>
+   <div>
+     <button onclick="addRandomCircle()">Add random circle</button>
+     <button onclick="clearCanvas()">Clear canvas</button>
+   </div>
+ </div>
+</body>

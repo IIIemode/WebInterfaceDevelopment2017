@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>My paint</title>
+	<style>
+		#drawingCanvas{
+			border: 1px solid;
+			cursor: pointer;
+			left: 77;
+			top: 20;
+		}
+		#canv{
+			border: 1px solid;
+			cursor: pointer;
+			left: 77;
+			top: 20;
+		}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+
+		var isDrawing = false, c; 
+		var f = new Image();
+		var canvas, context;
+
+		window.onload = function() {
+
+			canvas = document.getElementById("drawingCanvas");
+			context = canvas.getContext("2d");
+
+      canvas2 = document.getElementById("canv");
+			context2 = canvas2.getContext("2d");
+
+			f.src = "background.png";
+			f.onload = function() {
+				context.drawImage(f, 0, 0);
+			}
+			
+    // Подключаем требуемые для рисования события
+
+    canvas2.onmousedown = startDrawing;
+    canvas2.onmouseup = stopDrawing;
+    canvas.onclick = setColor;
+    canvas2.onmouseout = stopDrawing;
+    canvas2.onmousemove = draw;
+
+  }
+
+  function setColor(e){
+
+  	x = e.pageX - canvas.offsetLeft;
+    y = e.pageY - canvas.offsetTop;
+
+  	if (((x > 37)&&(x < 65))&&((y > 11)&&(y < 38)))   context.strokeStyle="#000000";
+  	if (((x > 37)&&(x < 65))&&((y > 43)&&(y < 70)))   context.strokeStyle="#7F7F7F";
+  	if (((x > 37)&&(x < 65))&&((y > 75)&&(y < 103)))  context.strokeStyle="#880015";
+  	if (((x > 37)&&(x < 65))&&((y > 109)&&(y < 136))) context.strokeStyle="#ED1C24";
+  	if (((x > 37)&&(x < 65))&&((y > 141)&&(y < 168))) context.strokeStyle="#FF7F27";
+  	if (((x > 37)&&(x < 65))&&((y > 175)&&(y < 200))) context.strokeStyle="#FFF200";
+  	if (((x > 37)&&(x < 65))&&((y > 208)&&(y < 235))) context.strokeStyle="#22B14C";
+  	if (((x > 37)&&(x < 65))&&((y > 240)&&(y < 268))) context.strokeStyle="#00A2E8";
+  	if (((x > 37)&&(x < 65))&&((y > 273)&&(y < 301))) context.strokeStyle="#3F48CC";
+  	if (((x > 37)&&(x < 65))&&((y > 306)&&(y < 334))) context.strokeStyle="#A349A4";
+  	if (((x > 4)&&(x < 32))&&((y > 11)&&(y < 38)))    context.strokeStyle="#FFFFFF";
+  	if (((x > 4)&&(x < 32))&&((y > 43)&&(y < 70)))    context.strokeStyle="#FFFFFF";
+  	if (((x > 4)&&(x < 32))&&((y > 75)&&(y < 103)))   context.strokeStyle="#B97A57";
+  	if (((x > 4)&&(x < 32))&&((y > 109)&&(y < 136)))  context.strokeStyle="#FFAEC9";
+  	if (((x > 4)&&(x < 32))&&((y > 141)&&(y < 168)))  context.strokeStyle="#FFC90E";
+  	if (((x > 4)&&(x < 32))&&((y > 175)&&(y < 200)))  context.strokeStyle="#EFE4B0";
+  	if (((x > 4)&&(x < 32))&&((y > 208)&&(y < 235)))  context.strokeStyle="#B5E61D";
+  	if (((x > 4)&&(x < 32))&&((y > 240)&&(y < 268)))  context.strokeStyle="#99D9EA";
+  	if (((x > 4)&&(x < 32))&&((y > 273)&&(y < 301)))  context.strokeStyle="#7092BE";
+  	if (((x > 4)&&(x < 32))&&((y > 306)&&(y < 334)))  context.strokeStyle="#C8BFE7";
+    
+  }
+
+  function startDrawing(e) {
+
+    // Начинаем рисовать
+    isDrawing = true;
+
+    // Создаем новый путь (с текущим цветом и толщиной линии)
+    
+    
+    // Нажатием левой кнопки мыши помещаем "кисть" на холст
+    x = e.pageX - canvas2.offsetLeft;
+    y = e.pageY - canvas2.offsetTop;
+    context.beginPath();
+    context2.moveTo(x, y);
+    context2.save();
+  }
+
+  /* рисование*/
+  function draw(e) {
+
+
+
+  	if (isDrawing == true){
+  		
+        // Определяем текущие координаты указателя мыши
+        var x = e.pageX - canvas2.offsetLeft;
+        var y = e.pageY - canvas2.offsetTop;
+
+        if ((x > 0)&&(x < 690)&&(y > 0)&&(y < 520)){
+
+          // Рисуем линию до новой координаты
+          context2.strokeStyle = context.strokeStyle;
+          context2.restore();
+          context2.lineTo(x, y);
+          context2.stroke();
+          //context2.closePath();
+        }
+      } 
+
+    }
+    /* СТОП рисование*/
+    function stopDrawing() {
+    	isDrawing = false;
+    }
+
+  </script>
+  <canvas id="drawingCanvas" width="73" height="513"></canvas>
+  <canvas id="canv" width="690" height="513"></canvas>
+  
+
+</body>
+</html>
